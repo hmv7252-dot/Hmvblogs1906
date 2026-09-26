@@ -1,0 +1,103 @@
+name: Build Debug APK
+
+on:
+  push:
+    branches:
+      - "**"
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  build:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Find Generated APK
+        shell: bash
+        run: |
+          set -e
+
+          echo "Searching for APK..."
+
+          APK=$(find app/build/outputs/apk \
+            -type f \
+            -name "*.apk" \
+            -print -quit 2>/dev/null || true)
+
+          if [ -z "$APK" ]; then
+            echo "APK not found in standard directory."
+            echo "Searching entire project..."
+
+            APK=$(find . \
+              -type f \
+              -name "*debug*.apk" \
+              -not -path "./.git/*" \
+              -print -quit 2>/dev/null || true)
+          fi
+
+          if [ -z "$APK" ]; then
+            echo "::error::No debug APK found!"
+            exit 1
+          fi
+
+          echo "APK found:"
+          echo "$APK"
+
+          mkdir -p artifacts
+
+          cp "$APK" artifacts/slide-master-debug.apk
+
+          echo "APK copied successfully."
+
+          ls -lh artifacts/slide-master-debug.apk
+
+      - name: Verify APK
+        shell: bash
+        run: |
+          if [ ! -f "artifacts/slide-master-debug.apk" ]; then
+            echo "::error::APK file does not exist!"
+            exit 1
+          fi
+
+          SIZE=$(stat -c%s artifacts/slide-master-debug.apk)
+
+          echo "APK size: $SIZE bytes"
+
+          if [ "$SIZE" -le 0 ]; then
+            echo "::error::APK is empty!"
+            exit 1
+          fi
+
+      - name: Upload Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: slide-master-debug-apk
+          path: artifacts/slide-master-debug.apk
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0

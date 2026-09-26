@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group>
+        <!-- Tile 1 (top-left) -->
+        <path
+            android:pathData="M28,28 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="25"
+                    android:startY="25"
+                    android:endX="45"
+                    android:endY="45"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#7C4DFF" />
+                    <item android:offset="1.0" android:color="#536DFE" />
+                </gradient>
+            </aapt:attr>
+        </path>
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M35,33 h2 v10 h-2 z" />
+
+        <!-- Tile 2 (top-mid) -->
+        <path
+            android:pathData="M48,28 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="45"
+                    android:startY="25"
+                    android:endX="65"
+                    android:endY="45"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#00E5FF" />
+                    <item android:offset="1.0" android:color="#00B0FF" />
+                </gradient>
+            </aapt:attr>
+        </path>
+        <!-- Number 2 dot/glyph -->
+        <path
+            android:fillColor="#003355"
+            android:pathData="M52,33 h6 v2 h-4 v2 h4 v6 h-6 v-2 h4 v-2 h-4 z" />
+
+        <!-- Tile 3 (top-right) -->
+        <path
+            android:pathData="M68,28 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="65"
+                    android:startY="25"
+                    android:endX="85"
+                    android:endY="45"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#FFD600" />
+                    <item android:offset="1.0" android:color="#FF9100" />
+                </gradient>
+            </aapt:attr>
+        </path>
+        <path
+            android:fillColor="#3E2723"
+            android:pathData="M72,33 h6 v3 h-3 v1 h3 v6 h-6 v-2 h4 v-1 h-3 v-2 h3 v-3 h-4 z" />
+
+        <!-- Tile 4 (mid-left) -->
+        <path
+            android:pathData="M28,48 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="25"
+                    android:startY="45"
+                    android:endX="45"
+                    android:endY="65"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#FF4081" />
+                    <item android:offset="1.0" android:color="#F50057" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Tile 5 (center) -->
+        <path
+            android:pathData="M48,48 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="45"
+                    android:startY="45"
+                    android:endX="65"
+                    android:endY="65"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#00E676" />
+                    <item android:offset="1.0" android:color="#00C853" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Tile 6 (mid-right) -->
+        <path
+            android:pathData="M68,48 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="65"
+                    android:startY="45"
+                    android:endX="85"
+                    android:endY="65"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#AB47BC" />
+                    <item android:offset="1.0" android:color="#7B1FA2" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Tile 7 (bottom-left) -->
+        <path
+            android:pathData="M28,68 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="25"
+                    android:startY="65"
+                    android:endX="45"
+                    android:endY="85"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#29B6F6" />
+                    <item android:offset="1.0" android:color="#0288D1" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Tile 8 (bottom-mid) -->
+        <path
+            android:pathData="M48,68 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="45"
+                    android:startY="65"
+                    android:endX="65"
+                    android:endY="85"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#FF7043" />
+                    <item android:offset="1.0" android:color="#E64A19" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Empty slot (bottom-right) dashed indicator -->
+        <path
+            android:strokeColor="#66FFFFFF"
+            android:strokeWidth="1.5"
+            android:fillColor="#11FFFFFF"
+            android:pathData="M68,68 h14 a3,3 0 0 1 3,3 v14 a3,3 0 0 1 -3,3 h-14 a3,3 0 0 1 -3,-3 v-14 a3,3 0 0 1 3,-3 z" />
+
+        <!-- Little motion arrow indicating sliding into the empty spot -->
+        <path
+            android:fillColor="#FFD54F"
+            android:pathData="M61,77 l-3,-3 v2 h-4 v2 h4 v2 z" />
+    </group>
+</vector>
+
