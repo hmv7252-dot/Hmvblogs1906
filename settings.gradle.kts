@@ -23,6 +23,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Slide Master"
+rootProject.name = "Slidecraft"
 
 include(":app")

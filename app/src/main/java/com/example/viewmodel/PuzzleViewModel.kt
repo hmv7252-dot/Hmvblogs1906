@@ -21,6 +21,10 @@ import com.example.model.GameMode
 import com.example.model.GameState
 import com.example.model.ImagePreset
 import com.example.model.TileTheme
+import com.example.security.AntiCheatManager
+import com.example.security.ScoreValidator
+import com.example.security.SecureStorageManager
+import com.example.security.SecurityManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,6 +111,10 @@ class PuzzleViewModel(application: Application) : AndroidViewModel(application) 
             viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList()
         )
 
+        // Load securely stored bonus stars from encrypted vault
+        val initialBonus = SecureStorageManager.getSecureInt("vault_bonus_stars", 0)
+        _bonusStars.value = initialBonus
+
         // Load saved settings from Room database
         viewModelScope.launch {
             val savedSettings = repository.getPlayerSettings()
@@ -137,6 +145,11 @@ class PuzzleViewModel(application: Application) : AndroidViewModel(application) 
     // ----------------------------------------------------
 
     fun startCampaignLevel(levelNumber: Int) {
+        val completed = completedLevelsCount.value
+        if (!ScoreValidator.validateCampaignLevelAccess(levelNumber, completed)) {
+            SecurityManager.notifySecurityWarning("Campaign level $levelNumber is locked.")
+            return
+        }
         val campaignLevel = PuzzleGenerator.getCampaignLevel(levelNumber)
         val (board, optimal) = PuzzleGenerator.generateSolvableBoard(
             size = campaignLevel.boardSize,
@@ -347,6 +360,11 @@ class PuzzleViewModel(application: Application) : AndroidViewModel(application) 
 
         if (!movableIndices.contains(tileIndex)) return
 
+        // Anti-cheat verification: validate physical adjacency and movement frequency
+        if (!AntiCheatManager.validateMoveAttempt(state.tiles, emptyIndex, tileIndex, state.boardSize)) {
+            return
+        }
+
         // Sound effect
         val pitch = 0.9f + (tileIndex % state.boardSize.dimension) * 0.08f
         soundManager.playTileMove(pitch)
@@ -403,6 +421,14 @@ class PuzzleViewModel(application: Application) : AndroidViewModel(application) 
         timeSeconds: Int,
         stars: Int
     ) {
+        val validStars = ScoreValidator.validateStarRating(stars)
+
+        // Comprehensive AntiCheat validation before recording scores & stars
+        if (!AntiCheatManager.validateGameCompletion(state, moves, timeSeconds, validStars)) {
+            SecurityManager.notifySecurityWarning("Game victory could not be validated.")
+            return
+        }
+
         val isPerfect = moves <= state.optimalMoves
         soundManager.playVictoryFanfare(isPerfect)
 
@@ -495,8 +521,13 @@ class PuzzleViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun rewardBonusStars(amount: Int) {
-        _bonusStars.value += amount
-        soundManager.playHint()
+        val validated = AntiCheatManager.validateBonusStarAward(amount)
+        if (validated > 0) {
+            val updated = _bonusStars.value + validated
+            _bonusStars.value = updated
+            SecureStorageManager.putSecureInt("vault_bonus_stars", updated)
+            soundManager.playHint()
+        }
     }
 
     fun executeRewardedHint() {
@@ -640,6 +671,7 @@ class PuzzleViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun startTimer() {
         stopTimer()
+        AntiCheatManager.onNewGameStarted()
         if (_gameState.value.gameMode == GameMode.ZEN) return
 
         timerJob = viewModelScope.launch {

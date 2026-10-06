@@ -28,6 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ads.LevelPlayManager
+import com.example.security.RewardValidator
+import com.example.security.SecurityManager
 import com.example.ui.components.LevelPlayBannerAd
 import com.example.ui.screens.CampaignMapScreen
 import com.example.ui.screens.GameScreen
@@ -70,6 +72,15 @@ class MainActivity : ComponentActivity() {
 
         // Initialize Unity LevelPlay SDK exactly once at app launch
         LevelPlayManager.initialize(this)
+
+        // Initialize Application Security & Anti-Cheat subsystems
+        SecurityManager.initialize(this)
+
+        lifecycleScope.launch {
+            SecurityManager.securityAlerts.collect { alertMessage ->
+                Toast.makeText(this@MainActivity, alertMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
 
         setContent {
             val isDarkMode by viewModel.isDarkMode.collectAsStateWithLifecycle()
@@ -167,11 +178,16 @@ class MainActivity : ComponentActivity() {
                                         onHintClick = {
                                             val activity = this@MainActivity
                                             if (LevelPlayManager.isRewardedReady()) {
+                                                val rewardToken = RewardValidator.createRewardToken()
                                                 LevelPlayManager.showRewarded(
                                                     activity = activity,
                                                     onReward = {
-                                                        viewModel.requestHint()
-                                                        Toast.makeText(activity, "Hint unlocked!", Toast.LENGTH_SHORT).show()
+                                                        if (RewardValidator.validateRewardedAdClaim(rewardToken)) {
+                                                            viewModel.requestHint()
+                                                            Toast.makeText(activity, "Hint unlocked!", Toast.LENGTH_SHORT).show()
+                                                        } else {
+                                                            SecurityManager.notifySecurityWarning("Reward verification failed.")
+                                                        }
                                                     }
                                                 )
                                             } else {
@@ -202,7 +218,10 @@ class MainActivity : ComponentActivity() {
                                             }
                                         },
                                         onBonusReward = {
-                                            viewModel.rewardBonusStars(50)
+                                            val token = RewardValidator.createRewardToken()
+                                            if (RewardValidator.consumeRewardToken(token)) {
+                                                viewModel.rewardBonusStars(50)
+                                            }
                                         }
                                     )
                                 }

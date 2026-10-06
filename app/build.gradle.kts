@@ -15,7 +15,7 @@ android {
   compileSdk { version = release(36) { minorApiLevel = 1 } }
 
   defaultConfig {
-    applicationId = "com.my.slidemaster"
+    applicationId = "com.my.slidecraft"
     minSdk = 23
     targetSdk = 35
     versionCode = 1
@@ -53,7 +53,9 @@ android {
   buildTypes {
     release {
       isCrunchPngs = false
-      isMinifyEnabled = false
+      isMinifyEnabled = true
+      isShrinkResources = true
+      isDebuggable = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       val customKeystorePath = System.getenv("KEYSTORE_PATH")?.ifBlank { null } ?: "${rootDir}/my-upload-key.jks"
       val hasReleaseKey = file(customKeystorePath).exists()

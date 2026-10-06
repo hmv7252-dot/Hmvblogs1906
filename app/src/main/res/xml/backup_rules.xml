@@ -6,8 +6,9 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
-    <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+    <!-- Exclude sensitive database and encrypted vault from plain backup extraction -->
+    <exclude domain="sharedpref" path="slidecraft_secure_vault.xml" />
+    <exclude domain="database" path="slidecraft_database" />
+    <exclude domain="database" path="slidecraft_database-shm" />
+    <exclude domain="database" path="slidecraft_database-wal" />
 </full-backup-content>

@@ -1,21 +1,41 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# =============================================================================
+# SLIDECRAFT PRODUCTION R8 / PROGUARD SECURITY RULES
+# =============================================================================
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Obfuscation & Source Mapping Protection
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Strip verbose and debug logging calls in production release builds
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int d(...);
+}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Room Database & Persistence Rules
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class * { *; }
+-keep @androidx.room.Dao interface * { *; }
+-keep class com.example.data.** { *; }
+-dontwarn androidx.room.paging.**
+
+# Moshi & JSON Serialization
+-keepclassmembers class * {
+    @com.squareup.moshi.* <fields>;
+}
+
+# Unity LevelPlay & IronSource Mediation Rules
+-keep class com.unity3d.** { *; }
+-dontwarn com.unity3d.**
+-keep class com.ironsource.** { *; }
+-dontwarn com.ironsource.**
+
+# Android Jetpack Compose Runtime
+-keep class androidx.compose.runtime.** { *; }
+
+# Security & Anti-Cheat: Obfuscate implementations while preserving Keystore callbacks
+-keepclassmembers class com.example.security.SecureStorageManager {
+    private *** ensureMasterKey(...);
+}

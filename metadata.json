@@ -1,5 +1,5 @@
 {
-  "name": "Slide Master",
+  "name": "Slidecraft",
   "description": "Infinite sliding puzzle game featuring 3x3 to 7x7 boards, Campaign, Endless, Daily Challenge, Time Attack, Zen, Image Puzzle, and Perfect Solve solver.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
